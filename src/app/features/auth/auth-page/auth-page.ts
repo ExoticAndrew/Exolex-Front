@@ -60,7 +60,7 @@ export class AuthPage {
     this.authService.login({ email: email!, senha: senha! }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/']);
+        this.router.navigate(['/app']);
       },
       error: (err) => {
         this.loading.set(false);
@@ -87,7 +87,7 @@ export class AuthPage {
     this.authService.cadastrar({ nome: nome!, email: email!, senha: senha! }).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/']);
+        this.router.navigate(['/app']);
       },
       error: (err) => {
         this.loading.set(false);
