@@ -1,0 +1,92 @@
+<div class="clientes">
+  <div class="clientes__header">
+    <h1>Clientes</h1>
+    <button class="btn-primary" (click)="abrirNovo()">+ Novo Cliente</button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="clientes__alert">{{ errorMessage() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="clientes__loading">Carregando...</p>
+  } @else {
+    <table class="clientes__table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Documento</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cliente of clientes(); track cliente.id) {
+          <tr>
+            <td>{{ cliente.nome }}</td>
+            <td>{{ cliente.documento }}</td>
+            <td>{{ cliente.email }}</td>
+            <td>{{ cliente.telefone || '-' }}</td>
+            <td class="clientes__actions">
+              <button (click)="abrirEdicao(cliente)">Editar</button>
+              <button (click)="excluir(cliente)" class="clientes__delete">Excluir</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="clientes__empty">Nenhum cliente cadastrado.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (totalPages() > 1) {
+      <div class="clientes__pagination">
+        @for (page of [].constructor(totalPages()); track $index) {
+          <button
+            [class.clientes__page--active]="$index === currentPage()"
+            (click)="irParaPagina($index)"
+          >
+            {{ $index + 1 }}
+          </button>
+        }
+      </div>
+    }
+  }
+
+  @if (showModal()) {
+    <div class="clientes__modal-backdrop" (click)="fecharModal()">
+      <div class="clientes__modal" (click)="$event.stopPropagation()">
+        <h2>{{ editingId() ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+
+        <form [formGroup]="form" (ngSubmit)="salvar()">
+          <div class="clientes__field">
+            <label>Nome</label>
+            <input formControlName="nome" placeholder="Nome completo" />
+          </div>
+
+          <div class="clientes__field">
+            <label>Documento (CPF/CNPJ)</label>
+            <input formControlName="documento" placeholder="000.000.000-00" />
+          </div>
+
+          <div class="clientes__field">
+            <label>Email</label>
+            <input formControlName="email" type="email" placeholder="cliente@email.com" />
+          </div>
+
+          <div class="clientes__field">
+            <label>Telefone</label>
+            <input formControlName="telefone" placeholder="(00) 00000-0000" />
+          </div>
+
+          <div class="clientes__modal-actions">
+            <button type="button" (click)="fecharModal()">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
