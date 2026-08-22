@@ -7,11 +7,12 @@ import { UsuarioService } from '../../../core/services/usuario.service';
 import { ProcessoResponse, PapelProcesso } from '../../../core/models/processo.model';
 import { ClienteResponse } from '../../../core/models/cliente.model';
 import { UsuarioResponse } from '../../../core/models/usuario.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-processos-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+ imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './processos-list.html',
   styleUrl: './processos-list.scss',
 })

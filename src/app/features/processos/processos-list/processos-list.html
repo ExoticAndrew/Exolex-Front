@@ -39,7 +39,8 @@
               </span>
             </td>
             <td>{{ processo.equipe.length }} pessoa(s)</td>
-            <td class="processos__actions">
+                      <td class="processos__actions">
+              <a [routerLink]="['/app/processos', processo.id]">Detalhes</a>
               <button (click)="abrirEquipe(processo)">Equipe</button>
               <button (click)="excluir(processo)" class="processos__delete">Excluir</button>
             </td>
