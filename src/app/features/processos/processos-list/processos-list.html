@@ -1,1 +1,146 @@
-<p>processos-list works!</p>
+<div class="processos">
+  <div class="processos__header">
+    <h1>Processos</h1>
+    <button class="btn-primary" (click)="abrirNovo()">+ Novo Processo</button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="processos__alert">{{ errorMessage() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="processos__loading">Carregando...</p>
+  } @else {
+    <table class="processos__table">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Título</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Equipe</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (processo of processos(); track processo.id) {
+          <tr>
+            <td>{{ processo.numero }}</td>
+            <td>{{ processo.titulo }}</td>
+            <td>{{ processo.clienteNome }}</td>
+            <td>
+              <span
+                class="processos__badge"
+                [class.processos__badge--ativo]="processo.status === 'ATIVO'"
+                [class.processos__badge--arquivado]="processo.status === 'ARQUIVADO'"
+                [class.processos__badge--encerrado]="processo.status === 'ENCERRADO'"
+              >
+                {{ processo.status }}
+              </span>
+            </td>
+            <td>{{ processo.equipe.length }} pessoa(s)</td>
+            <td class="processos__actions">
+              <button (click)="abrirEquipe(processo)">Equipe</button>
+              <button (click)="excluir(processo)" class="processos__delete">Excluir</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="processos__empty">Nenhum processo cadastrado.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (totalPages() > 1) {
+      <div class="processos__pagination">
+        @for (page of [].constructor(totalPages()); track $index) {
+          <button
+            [class.processos__page--active]="$index === currentPage()"
+            (click)="irParaPagina($index)"
+          >
+            {{ $index + 1 }}
+          </button>
+        }
+      </div>
+    }
+  }
+
+  @if (showModal()) {
+    <div class="processos__modal-backdrop" (click)="fecharModal()">
+      <div class="processos__modal" (click)="$event.stopPropagation()">
+        <h2>Novo Processo</h2>
+
+        <form [formGroup]="form" (ngSubmit)="salvar()">
+          <div class="processos__field">
+            <label>Número do processo</label>
+            <input formControlName="numero" placeholder="0000000-00.0000.0.00.0000" />
+          </div>
+
+          <div class="processos__field">
+            <label>Título</label>
+            <input formControlName="titulo" placeholder="Ex: Ação de cobrança" />
+          </div>
+
+          <div class="processos__field">
+            <label>Cliente</label>
+            <select formControlName="clienteId">
+              <option [ngValue]="null" disabled>Selecione um cliente</option>
+              @for (cliente of clientes(); track cliente.id) {
+                <option [ngValue]="cliente.id">{{ cliente.nome }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="processos__modal-actions">
+            <button type="button" (click)="fecharModal()">Cancelar</button>
+            <button type="submit" class="btn-primary">Criar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  @if (showEquipeModal() && processoSelecionado(); as processo) {
+    <div class="processos__modal-backdrop" (click)="fecharEquipeModal()">
+      <div class="processos__modal" (click)="$event.stopPropagation()">
+        <h2>Equipe — {{ processo.numero }}</h2>
+
+        <ul class="processos__equipe-lista">
+          @for (vinculo of processo.equipe; track vinculo.usuarioId) {
+            <li>
+              <span>{{ vinculo.usuarioNome }}</span>
+              <span class="processos__papel">{{ vinculo.papel }}</span>
+            </li>
+          }
+        </ul>
+
+        <form [formGroup]="equipeForm" (ngSubmit)="adicionarColaborador()" class="processos__equipe-form">
+          <div class="processos__field">
+            <label>Adicionar usuário</label>
+            <select formControlName="usuarioId">
+              <option [ngValue]="null" disabled>Selecione um usuário</option>
+              @for (usuario of usuarios(); track usuario.id) {
+                <option [ngValue]="usuario.id">{{ usuario.nome }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="processos__field">
+            <label>Papel</label>
+            <select formControlName="papel">
+              @for (papel of papeis; track papel) {
+                <option [ngValue]="papel">{{ papel }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="processos__modal-actions">
+            <button type="button" (click)="fecharEquipeModal()">Fechar</button>
+            <button type="submit" class="btn-primary">Adicionar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+</div>
