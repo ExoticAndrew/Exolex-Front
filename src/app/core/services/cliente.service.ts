@@ -6,7 +6,7 @@ import { ClienteRequest, ClienteResponse, Page } from '../models/cliente.model';
 
 @Injectable({ providedIn: 'root' })
 export class ClienteService {
-  private readonly apiUrl = `/clientes`;
+  private readonly apiUrl = `${environment.apiUrl}/clientes`;
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +20,7 @@ export class ClienteService {
   }
 
   buscarPorId(id: number): Observable<ClienteResponse> {
-    return this.http.get<ClienteResponse>(`/`);
+    return this.http.get<ClienteResponse>(`${this.apiUrl}/${id}`);
   }
 
   criar(dto: ClienteRequest): Observable<ClienteResponse> {
@@ -28,10 +28,10 @@ export class ClienteService {
   }
 
   atualizar(id: number, dto: ClienteRequest): Observable<ClienteResponse> {
-    return this.http.put<ClienteResponse>(`/`, dto);
+    return this.http.put<ClienteResponse>(`${this.apiUrl}/${id}`, dto);
   }
 
   deletar(id: number): Observable<void> {
-    return this.http.delete<void>(`/`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
