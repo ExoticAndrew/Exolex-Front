@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClienteService } from '../../../core/services/cliente.service';
 import { ClienteResponse } from '../../../core/models/cliente.model';
@@ -46,8 +47,8 @@ export class ClientesList implements OnInit {
         this.totalPages.set(page.totalPages);
         this.loading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível carregar os clientes.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível carregar os clientes.');
         this.loading.set(false);
       },
     });
@@ -97,8 +98,8 @@ export class ClientesList implements OnInit {
         this.showModal.set(false);
         this.carregar();
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível salvar o cliente.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível salvar o cliente.');
       },
     });
   }
@@ -108,7 +109,9 @@ export class ClientesList implements OnInit {
 
     this.clienteService.deletar(cliente.id).subscribe({
       next: () => this.carregar(),
-      error: () => this.errorMessage.set('Não foi possível excluir o cliente.'),
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível excluir o cliente.');
+      },
     });
   }
 }

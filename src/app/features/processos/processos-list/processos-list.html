@@ -39,10 +39,12 @@
               </span>
             </td>
             <td>{{ processo.equipe.length }} pessoa(s)</td>
-                      <td class="processos__actions">
+            <td class="processos__actions">
               <a [routerLink]="['/app/processos', processo.id]">Detalhes</a>
-              <button (click)="abrirEquipe(processo)">Equipe</button>
-              <button (click)="excluir(processo)" class="processos__delete">Excluir</button>
+              @if (ehResponsavel(processo)) {
+                <button (click)="abrirEquipe(processo)">Equipe</button>
+                <button (click)="excluir(processo)" class="processos__delete">Excluir</button>
+              }
             </td>
           </tr>
         } @empty {
@@ -121,7 +123,7 @@
             <label>Adicionar usuário</label>
             <select formControlName="usuarioId">
               <option [ngValue]="null" disabled>Selecione um usuário</option>
-              @for (usuario of usuarios(); track usuario.id) {
+              @for (usuario of usuariosDisponiveis(); track usuario.id) {
                 <option [ngValue]="usuario.id">{{ usuario.nome }}</option>
               }
             </select>

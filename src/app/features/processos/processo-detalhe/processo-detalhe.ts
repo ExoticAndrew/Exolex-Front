@@ -1,9 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProcessoService } from '../../../core/services/processo.service';
 import { PrazoService } from '../../../core/services/prazo.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ProcessoResponse } from '../../../core/models/processo.model';
 import { PrazoResponse, StatusPrazo } from '../../../core/models/prazo.model';
 
@@ -27,12 +29,24 @@ export class ProcessoDetalhe implements OnInit {
 
   readonly statusOptions: StatusPrazo[] = ['PENDENTE', 'CUMPRIDO', 'VENCIDO'];
 
+  readonly meuPapel = computed(() => {
+    const p = this.processo();
+    const meuId = this.authService.id();
+    if (!p || meuId === null) return null;
+
+    const vinculo = p.equipe.find((v) => v.usuarioId === meuId);
+    return vinculo?.papel ?? null;
+  });
+
+  readonly podeEditar = computed(() => this.meuPapel() !== 'VISUALIZADOR');
+
   private processoId!: number;
 
   constructor(
     private route: ActivatedRoute,
     private processoService: ProcessoService,
     private prazoService: PrazoService,
+    private authService: AuthService,
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
@@ -50,7 +64,9 @@ export class ProcessoDetalhe implements OnInit {
   carregarProcesso(): void {
     this.processoService.buscarPorId(this.processoId).subscribe({
       next: (processo) => this.processo.set(processo),
-      error: () => this.errorMessage.set('Não foi possível carregar o processo.'),
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível carregar o processo.');
+      },
     });
   }
 
@@ -62,8 +78,8 @@ export class ProcessoDetalhe implements OnInit {
         this.totalPages.set(page.totalPages);
         this.loading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível carregar os prazos.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível carregar os prazos.');
         this.loading.set(false);
       },
     });
@@ -94,8 +110,8 @@ export class ProcessoDetalhe implements OnInit {
         this.showModal.set(false);
         this.carregarPrazos();
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível criar o prazo.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível criar o prazo.');
       },
     });
   }
@@ -103,7 +119,9 @@ export class ProcessoDetalhe implements OnInit {
   mudarStatus(prazo: PrazoResponse, status: StatusPrazo): void {
     this.prazoService.atualizarStatus(this.processoId, prazo.id, { status }).subscribe({
       next: () => this.carregarPrazos(),
-      error: () => this.errorMessage.set('Não foi possível atualizar o status.'),
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível atualizar o status.');
+      },
     });
   }
 
@@ -112,7 +130,9 @@ export class ProcessoDetalhe implements OnInit {
 
     this.prazoService.deletar(this.processoId, prazo.id).subscribe({
       next: () => this.carregarPrazos(),
-      error: () => this.errorMessage.set('Não foi possível excluir o prazo.'),
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível excluir o prazo.');
+      },
     });
   }
 }

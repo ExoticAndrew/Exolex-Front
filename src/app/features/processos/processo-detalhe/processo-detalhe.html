@@ -27,7 +27,9 @@
 
   <div class="detalhe__prazos-header">
     <h2>Prazos</h2>
-    <button class="btn-primary" (click)="abrirNovo()">+ Novo Prazo</button>
+    @if (podeEditar()) {
+      <button class="btn-primary" (click)="abrirNovo()">+ Novo Prazo</button>
+    }
   </div>
 
   @if (loading()) {
@@ -39,7 +41,9 @@
           <th>Descrição</th>
           <th>Vencimento</th>
           <th>Status</th>
-          <th></th>
+          @if (podeEditar()) {
+            <th></th>
+          }
         </tr>
       </thead>
       <tbody>
@@ -57,14 +61,16 @@
                 {{ prazo.status }}
               </span>
             </td>
-            <td class="detalhe__actions">
-              <select (change)="mudarStatus(prazo, $any($event.target).value)">
-                @for (status of statusOptions; track status) {
-                  <option [value]="status" [selected]="status === prazo.status">{{ status }}</option>
-                }
-              </select>
-              <button (click)="excluir(prazo)" class="detalhe__delete">Excluir</button>
-            </td>
+            @if (podeEditar()) {
+              <td class="detalhe__actions">
+                <select (change)="mudarStatus(prazo, $any($event.target).value)">
+                  @for (status of statusOptions; track status) {
+                    <option [value]="status" [selected]="status === prazo.status">{{ status }}</option>
+                  }
+                </select>
+                <button (click)="excluir(prazo)" class="detalhe__delete">Excluir</button>
+              </td>
+            }
           </tr>
         } @empty {
           <tr>

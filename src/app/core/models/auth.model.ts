@@ -10,6 +10,7 @@ export interface CadastroRequest {
 }
 
 export interface LoginResponse {
+  id: number;
   token: string;
   nome: string;
 }

@@ -1,18 +1,20 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProcessoService } from '../../../core/services/processo.service';
 import { ClienteService } from '../../../core/services/cliente.service';
 import { UsuarioService } from '../../../core/services/usuario.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ProcessoResponse, PapelProcesso } from '../../../core/models/processo.model';
 import { ClienteResponse } from '../../../core/models/cliente.model';
 import { UsuarioResponse } from '../../../core/models/usuario.model';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-processos-list',
   standalone: true,
- imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './processos-list.html',
   styleUrl: './processos-list.scss',
 })
@@ -34,10 +36,19 @@ export class ProcessosList implements OnInit {
 
   readonly papeis: PapelProcesso[] = ['RESPONSAVEL', 'COLABORADOR', 'VISUALIZADOR'];
 
+  readonly usuariosDisponiveis = computed(() => {
+    const processo = this.processoSelecionado();
+    if (!processo) return this.usuarios();
+
+    const idsNaEquipe = new Set(processo.equipe.map((v) => v.usuarioId));
+    return this.usuarios().filter((u) => !idsNaEquipe.has(u.id));
+  });
+
   constructor(
     private processoService: ProcessoService,
     private clienteService: ClienteService,
     private usuarioService: UsuarioService,
+    private authService: AuthService,
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
@@ -66,8 +77,8 @@ export class ProcessosList implements OnInit {
         this.totalPages.set(page.totalPages);
         this.loading.set(false);
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível carregar os processos.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível carregar os processos.');
         this.loading.set(false);
       },
     });
@@ -112,8 +123,8 @@ export class ProcessosList implements OnInit {
         this.showModal.set(false);
         this.carregar();
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível criar o processo.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível criar o processo.');
       },
     });
   }
@@ -123,7 +134,9 @@ export class ProcessosList implements OnInit {
 
     this.processoService.deletar(processo.id).subscribe({
       next: () => this.carregar(),
-      error: () => this.errorMessage.set('Não foi possível excluir o processo.'),
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível excluir o processo.');
+      },
     });
   }
 
@@ -157,9 +170,17 @@ export class ProcessosList implements OnInit {
           },
         });
       },
-      error: () => {
-        this.errorMessage.set('Não foi possível adicionar o colaborador.');
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.message ?? 'Não foi possível adicionar o colaborador.');
       },
     });
+  }
+
+  ehResponsavel(processo: ProcessoResponse): boolean {
+    const meuId = this.authService.id();
+    if (meuId === null) return false;
+
+    const vinculo = processo.equipe.find((v) => v.usuarioId === meuId);
+    return vinculo?.papel === 'RESPONSAVEL';
   }
 }
