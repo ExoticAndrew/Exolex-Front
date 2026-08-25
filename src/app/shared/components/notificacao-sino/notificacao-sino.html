@@ -1,0 +1,28 @@
+<div class="sino">
+  <button class="sino__botao" (click)="toggle()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    @if (naoLidas() > 0) {
+      <span class="sino__badge">{{ naoLidas() }}</span>
+    }
+  </button>
+
+  @if (aberto()) {
+    <div class="sino__dropdown">
+      <div class="sino__header">Notificações</div>
+
+      @if (notificacoes().length === 0) {
+        <p class="sino__vazio">Nenhuma notificação ainda.</p>
+      } @else {
+               @for (n of notificacoes(); track n.id) {
+          <div class="sino__item" [class.sino__item--nao-lida]="!n.lida">
+            <p>{{ n.mensagem }}</p>
+            <span class="sino__data">{{ n.criadoEm | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        }
+      }
+    </div>
+  }
+</div>
