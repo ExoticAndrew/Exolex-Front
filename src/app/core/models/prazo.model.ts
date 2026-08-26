@@ -16,3 +16,12 @@ export interface PrazoResponse {
 export interface AtualizarStatusPrazoRequest {
   status: StatusPrazo;
 }
+
+export interface PrazoProximo {
+  id: number;
+  descricao: string;
+  dataVencimento: string;
+  status: StatusPrazo;
+  processoId: number;
+  processoNumero: string;
+}

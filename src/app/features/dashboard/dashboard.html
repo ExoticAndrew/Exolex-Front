@@ -1,0 +1,55 @@
+﻿<div class="dash">
+  <header class="dash__hero">
+    <p class="dash__eyebrow">Painel</p>
+    <h1 class="dash__saudacao">Olá, {{ authService.nome() }}</h1>
+    <p class="dash__sub">Aqui está o que precisa da sua atenção agora.</p>
+  </header>
+
+  @if (errorMessage()) {
+    <div class="dash__alert">{{ errorMessage() }}</div>
+  }
+
+  <section class="dash__prazos">
+    <div class="dash__prazos-header">
+      <h2>Prazos em foco</h2>
+      @if (prazos().length > 0) {
+        <span class="dash__prazos-count">{{ prazos().length }}</span>
+      }
+    </div>
+
+    @if (loading()) {
+      <p class="dash__loading">Carregando...</p>
+    } @else if (prazos().length === 0) {
+      <div class="dash__vazio">
+        <p>Nenhum prazo pendente nos seus processos. Tudo em dia.</p>
+      </div>
+    } @else {
+      <div class="dash__lista-prazos">
+        @for (prazo of prazos(); track prazo.id) {
+          <a [routerLink]="['/app/processos', prazo.processoId]" class="dash__prazo" [class.dash__prazo--atrasado]="urgencia(prazo.dataVencimento) === 'atrasado'" [class.dash__prazo--critico]="urgencia(prazo.dataVencimento) === 'critico'" [class.dash__prazo--atencao]="urgencia(prazo.dataVencimento) === 'atencao'" [class.dash__prazo--tranquilo]="urgencia(prazo.dataVencimento) === 'tranquilo'">
+            <div class="dash__prazo-marcador"></div>
+            <div class="dash__prazo-info">
+              <span class="dash__prazo-descricao">{{ prazo.descricao }}</span>
+              <span class="dash__prazo-processo">{{ prazo.processoNumero }}</span>
+            </div>
+            <div class="dash__prazo-tempo">
+              <span class="dash__prazo-texto">{{ textoPrazo(prazo.dataVencimento) }}</span>
+              <span class="dash__prazo-data">{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</span>
+            </div>
+          </a>
+        }
+      </div>
+    }
+  </section>
+
+  <section class="dash__resumo">
+    <a routerLink="/app/processos" class="dash__resumo-item">
+      <span class="dash__resumo-numero">{{ totalProcessos() }}</span>
+      <span class="dash__resumo-label">Processos ativos</span>
+    </a>
+    <a routerLink="/app/clientes" class="dash__resumo-item">
+      <span class="dash__resumo-numero">{{ totalClientes() }}</span>
+      <span class="dash__resumo-label">Clientes na carteira</span>
+    </a>
+  </section>
+</div>

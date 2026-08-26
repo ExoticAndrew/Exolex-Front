@@ -6,12 +6,14 @@ import {
   PrazoRequest,
   PrazoResponse,
   AtualizarStatusPrazoRequest,
+  PrazoProximo,
 } from '../models/prazo.model';
 import { Page } from '../models/cliente.model';
 
 @Injectable({ providedIn: 'root' })
 export class PrazoService {
   private readonly apiUrl = `${environment.apiUrl}/processos`;
+  private readonly apiUrlPrazos = `${environment.apiUrl}/prazos`;
 
   constructor(private http: HttpClient) {}
 
@@ -22,6 +24,10 @@ export class PrazoService {
       .set('sort', 'dataVencimento');
 
     return this.http.get<Page<PrazoResponse>>(`${this.apiUrl}/${processoId}/prazos`, { params });
+  }
+
+  listarProximos(): Observable<PrazoProximo[]> {
+    return this.http.get<PrazoProximo[]>(`${this.apiUrlPrazos}/proximos`);
   }
 
   criar(processoId: number, dto: PrazoRequest): Observable<PrazoResponse> {

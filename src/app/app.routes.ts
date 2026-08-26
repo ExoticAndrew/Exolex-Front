@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Landing } from './layout/landing/landing';
 import { AuthPage } from './features/auth/auth-page/auth-page';
 import { Shell } from './layout/shell/shell';
+import { Dashboard } from './features/dashboard/dashboard';
 import { ClientesList } from './features/clientes/clientes-list/clientes-list';
 import { ProcessosList } from './features/processos/processos-list/processos-list';
 import { ProcessoDetalhe } from './features/processos/processo-detalhe/processo-detalhe';
@@ -16,7 +17,7 @@ export const routes: Routes = [
     component: Shell,
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'clientes', pathMatch: 'full' },
+      { path: '', component: Dashboard },
       { path: 'clientes', component: ClientesList },
       { path: 'processos', component: ProcessosList },
       { path: 'processos/:id', component: ProcessoDetalhe },
