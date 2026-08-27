@@ -1,6 +1,9 @@
 <div class="processos">
   <div class="processos__header">
-    <h1>Processos</h1>
+    <div>
+      <p class="processos__eyebrow">Carteira de casos</p>
+      <h1>Processos</h1>
+    </div>
     <button class="btn-primary" (click)="abrirNovo()">+ Novo Processo</button>
   </div>
 
@@ -10,8 +13,15 @@
 
   @if (loading()) {
     <p class="processos__loading">Carregando...</p>
+  } @else if (processos().length === 0) {
+    <div class="processos__vazio">
+      <p>Você ainda não tem nenhum processo cadastrado.</p>
+      <button class="btn-primary" (click)="abrirNovo()">Criar o primeiro processo</button>
+    </div>
   } @else {
+        <div class="processos__table-wrapper">
     <table class="processos__table">
+      
       <thead>
         <tr>
           <th>Número</th>
@@ -25,7 +35,7 @@
       <tbody>
         @for (processo of processos(); track processo.id) {
           <tr>
-            <td>{{ processo.numero }}</td>
+            <td class="processos__numero">{{ processo.numero }}</td>
             <td>{{ processo.titulo }}</td>
             <td>{{ processo.clienteNome }}</td>
             <td>
@@ -47,13 +57,10 @@
               }
             </td>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="6" class="processos__empty">Nenhum processo cadastrado.</td>
-          </tr>
         }
       </tbody>
     </table>
+        </div>
 
     @if (totalPages() > 1) {
       <div class="processos__pagination">

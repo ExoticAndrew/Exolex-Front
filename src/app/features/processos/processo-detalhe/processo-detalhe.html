@@ -8,11 +8,13 @@
   @if (processo(); as p) {
     <div class="detalhe__header">
       <div>
+        <p class="detalhe__eyebrow">Processo</p>
         <h1>{{ p.numero }}</h1>
-        <p>{{ p.titulo }}</p>
+        <p class="detalhe__titulo">{{ p.titulo }}</p>
       </div>
       <div class="detalhe__info">
         <span><strong>Cliente:</strong> {{ p.clienteNome }}</span>
+        <span class="detalhe__equipe-chip">{{ p.equipe.length }} na equipe</span>
         <span
           class="detalhe__badge"
           [class.detalhe__badge--ativo]="p.status === 'ATIVO'"
@@ -34,51 +36,53 @@
 
   @if (loading()) {
     <p class="detalhe__loading">Carregando...</p>
+  } @else if (prazos().length === 0) {
+    <div class="detalhe__vazio">
+      <p>Nenhum prazo cadastrado para este processo ainda.</p>
+    </div>
   } @else {
-    <table class="detalhe__table">
-      <thead>
-        <tr>
-          <th>Descrição</th>
-          <th>Vencimento</th>
-          <th>Status</th>
-          @if (podeEditar()) {
-            <th></th>
-          }
-        </tr>
-      </thead>
-      <tbody>
-        @for (prazo of prazos(); track prazo.id) {
+    <div class="detalhe__table-wrapper">
+      <table class="detalhe__table">
+        <thead>
           <tr>
-            <td>{{ prazo.descricao }}</td>
-            <td>{{ prazo.dataVencimento }}</td>
-            <td>
-              <span
-                class="detalhe__badge"
-                [class.detalhe__badge--pendente]="prazo.status === 'PENDENTE'"
-                [class.detalhe__badge--cumprido]="prazo.status === 'CUMPRIDO'"
-                [class.detalhe__badge--vencido]="prazo.status === 'VENCIDO'"
-              >
-                {{ prazo.status }}
-              </span>
-            </td>
+            <th>Descrição</th>
+            <th>Vencimento</th>
+            <th>Status</th>
             @if (podeEditar()) {
-              <td class="detalhe__actions">
-                <select (change)="mudarStatus(prazo, $any($event.target).value)">
-                  @for (status of statusOptions; track status) {
-                    <option [value]="status" [selected]="status === prazo.status">{{ status }}</option>
-                  }
-                </select>
-                <button (click)="excluir(prazo)" class="detalhe__delete">Excluir</button>
-              </td>
+              <th></th>
             }
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="4" class="detalhe__empty">Nenhum prazo cadastrado para este processo.</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (prazo of prazos(); track prazo.id) {
+            <tr>
+              <td>{{ prazo.descricao }}</td>
+              <td>{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</td>
+              <td>
+                <span
+                  class="detalhe__badge"
+                  [class.detalhe__badge--pendente]="prazo.status === 'PENDENTE'"
+                  [class.detalhe__badge--cumprido]="prazo.status === 'CUMPRIDO'"
+                  [class.detalhe__badge--vencido]="prazo.status === 'VENCIDO'"
+                >
+                  {{ prazo.status }}
+                </span>
+              </td>
+              @if (podeEditar()) {
+                <td class="detalhe__actions">
+                  <select (change)="mudarStatus(prazo, $any($event.target).value)">
+                    @for (status of statusOptions; track status) {
+                      <option [value]="status" [selected]="status === prazo.status">{{ status }}</option>
+                    }
+                  </select>
+                  <button (click)="excluir(prazo)" class="detalhe__delete">Excluir</button>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
     @if (totalPages() > 1) {
       <div class="detalhe__pagination">

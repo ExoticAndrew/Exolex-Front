@@ -1,18 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
+
 .clientes {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   &__header {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
 
     h1 {
-      font-size: 22px;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 26px;
       font-weight: 600;
       color: #072642;
       margin: 0;
     }
+  }
+
+  &__eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2E7BC9;
+    margin: 0 0 4px;
   }
 
   &__alert {
@@ -28,6 +40,25 @@
   &__loading {
     color: #6b7280;
     font-size: 14px;
+  }
+
+  &__vazio {
+    background: white;
+    border: 1px dashed #e5e9f0;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+
+    p {
+      color: #6b7280;
+      font-size: 14px;
+      margin: 0 0 1.25rem;
+    }
+  }
+
+  &__table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
   }
 
   &__table {
@@ -50,21 +81,28 @@
     }
 
     td {
-      padding: 0.85rem 1.25rem;
+      padding: 0.9rem 1.25rem;
       font-size: 14px;
       color: #1f2937;
       border-bottom: 1px solid #f0f2f5;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    tr {
+      transition: background 0.12s ease;
+
+      &:hover td {
+        background: #fafbfd;
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
     }
   }
 
-  &__empty {
-    text-align: center;
-    color: #9ca3af;
-    padding: 2rem !important;
+  &__nome {
+    font-weight: 500;
+    color: #072642;
   }
 
   &__actions {
@@ -119,11 +157,12 @@
   &__modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(7, 38, 66, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 100;
+    animation: clientes-fade 0.15s ease;
   }
 
   &__modal {
@@ -132,9 +171,11 @@
     padding: 2rem;
     width: 100%;
     max-width: 420px;
+    animation: clientes-pop 0.18s ease;
 
     h2 {
-      font-size: 18px;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 19px;
       font-weight: 600;
       color: #072642;
       margin: 0 0 1.5rem;
@@ -159,6 +200,7 @@
       border-radius: 8px;
       font-size: 14px;
       outline: none;
+      transition: border-color 0.15s ease;
 
       &:focus {
         border-color: #2E7BC9;
@@ -183,6 +225,32 @@
       color: #374151;
     }
   }
+
+  @media screen and (max-width: 768px) {
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .btn-primary {
+        width: 100%;
+      }
+    }
+
+    &__table {
+      min-width: 560px;
+    }
+  }
+}
+
+@keyframes clientes-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes clientes-pop {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .btn-primary {
