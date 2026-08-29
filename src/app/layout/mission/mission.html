@@ -1,0 +1,8 @@
+<section class="mission" #missionSection>
+  <p class="mission__eyebrow">Por que o Exolex existe</p>
+  <p class="mission__text">
+    @for (word of words; track $index) {
+      <span class="mission__word" [class.mission__word--ativa]="isActive($index)">{{ word }}</span>
+    }
+  </p>
+</section>
