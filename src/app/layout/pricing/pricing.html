@@ -1,0 +1,85 @@
+<section class="pricing">
+  <div class="pricing__glow-esquerda"></div>
+  <div class="pricing__glow-direita"></div>
+
+  <div class="pricing__header">
+    <p class="pricing__eyebrow">Planos</p>
+    <h2>Escolha o ritmo do seu escritório</h2>
+    <p class="pricing__sub">Comece grátis e evolua conforme sua equipe cresce.</p>
+
+    <div class="pricing__toggle">
+      <span [class.pricing__toggle-label--ativo]="!anual()">Mensal</span>
+            <button
+        #switchBtn
+        class="pricing__switch"
+        [class.pricing__switch--anual]="anual()"
+        (click)="alternarPeriodo()"
+        type="button"
+        aria-label="Alternar entre cobrança mensal e anual"
+      >
+        <span class="pricing__switch-knob"></span>
+      </button>
+      <span [class.pricing__toggle-label--ativo]="anual()">
+        Anual
+        <span class="pricing__badge-economia">-20%</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="pricing__container">
+    <div class="pricing__grid">
+      @for (plano of planos; track plano.id) {
+        <div class="pricing__card" [class.pricing__card--recomendado]="plano.recomendado">
+          @if (plano.recomendado) {
+            <div class="pricing__card-glow"></div>
+            <span class="pricing__tag">Mais popular</span>
+          }
+
+                        <div class="pricing__preco">
+            @if (precoExibido(plano) === 0) {
+              <span class="pricing__preco-valor">Grátis</span>
+            } @else {
+              <span class="pricing__preco-moeda">R$</span>
+              <span class="pricing__preco-valor pricing__digitos">
+                @for (digito of digitosPreco(plano); track $index + '_' + digito) {
+                  <span
+                    class="pricing__digito"
+                    [style.animation-delay.ms]="$index * 40"
+                  >{{ digito }}</span>
+                }
+              </span>
+              <span class="pricing__preco-periodo">/mês</span>
+            }
+          </div>
+
+          <h3>{{ plano.nome }}</h3>
+          <p class="pricing__descricao">{{ plano.descricao }}</p>
+
+          <div class="pricing__divisor"></div>
+
+          <p class="pricing__recursos-titulo">O que está incluso</p>
+          <ul class="pricing__recursos">
+            @for (recurso of plano.recursos; track recurso) {
+              <li>
+                <span class="pricing__check">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M20 6 9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                {{ recurso }}
+              </li>
+            }
+          </ul>
+
+          <button
+            class="pricing__cta"
+            [class.pricing__cta--sobre-navy]="plano.recomendado"
+            routerLink="/cadastro"
+          >
+            {{ plano.cta }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</section>
