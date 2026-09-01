@@ -13,7 +13,7 @@
     padding: 1.5rem 1rem;
   }
 
-  &__logo {
+   &__logo {
     display: block;
     padding: 0 0.75rem;
     margin-bottom: 2.5rem;
@@ -21,6 +21,7 @@
     img {
       height: 26px;
       width: auto;
+      filter: brightness(0) invert(1);
     }
   }
 

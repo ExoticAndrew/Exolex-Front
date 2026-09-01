@@ -122,11 +122,10 @@ form.sign-in-form {
 
 .form-logo {
   margin-bottom: 1rem;
-
   img {
     height: 26px;
     width: auto;
-    filter: drop-shadow(0 0 1px rgba(255,255,255,0.3));
+    filter: brightness(0) invert(1);
   }
 }
 

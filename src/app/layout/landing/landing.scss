@@ -46,6 +46,7 @@
       height: 28px;
       width: auto;
       display: block;
+      filter: brightness(0) invert(1);
     }
   }
 
@@ -55,15 +56,17 @@
     gap: 32px;
     font-size: 14px;
     font-weight: 500;
-    color: white;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 
-    span {
+    a,
+    a:visited {
       display: flex;
       align-items: center;
       gap: 4px;
+      color: white;
+      text-decoration: none;
       cursor: pointer;
       transition: color 0.2s ease;
 
@@ -120,7 +123,7 @@
     }
   }
 
-   &__btn-cta {
+  &__btn-cta {
     background: white;
     color: #072642;
     border: none;
@@ -170,6 +173,7 @@
       margin: 0 0 1.25rem;
       letter-spacing: -0.03em;
     }
+
     p {
       font-size: 18px;
       color: #B5D4F4;
@@ -195,17 +199,21 @@
     &__content {
       grid-template-columns: 1fr;
     }
+
     &__nav-center {
       display: none;
     }
+
     &__nav-actions {
       gap: 8px;
     }
+
     &__btn-login,
     &__btn-signup {
       padding: 0 16px;
       font-size: 13px;
     }
+
     &__text h1 {
       font-size: 34px;
     }
