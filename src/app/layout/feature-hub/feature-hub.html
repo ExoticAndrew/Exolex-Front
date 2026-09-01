@@ -1,0 +1,45 @@
+<section class="hub" #container>
+  <div class="hub__glow"></div>
+  <svg class="hub__svg" aria-hidden="true">
+    @for (conexao of conexoes(); track conexao.id) {
+      <path class="hub__linha-base" [attr.d]="conexao.d" />
+    }
+    @for (conexao of conexoes(); track conexao.id) {
+      <path
+        class="hub__linha-pulso"
+        [class.hub__linha-pulso--reversa]="conexao.reverse"
+        [attr.d]="conexao.d"
+        [style.--len.px]="conexao.length"
+        [style.animation-duration.s]="conexao.duration"
+        [style.animation-delay.s]="conexao.delay"
+      />
+    }
+  </svg>
+  <div class="hub__layout">
+    <div class="hub__externas hub__externas--esquerda">
+      @for (item of externaEsquerda; track item.titulo) {
+        <div class="hub__card hub__card--secundario">{{ item.titulo }}</div>
+      }
+    </div>
+    <div class="hub__internas hub__internas--esquerda">
+      @for (item of internaEsquerda; track item.titulo) {
+        <div class="hub__card" #cardEsq>{{ item.titulo }}</div>
+      }
+    </div>
+    <div class="hub__core-wrap">
+      <div class="hub__core" #core>
+        <span class="hub__core-label">Exolex</span>
+      </div>
+    </div>
+    <div class="hub__internas hub__internas--direita">
+      @for (item of internaDireita; track item.titulo) {
+        <div class="hub__card" #cardDir>{{ item.titulo }}</div>
+      }
+    </div>
+    <div class="hub__externas hub__externas--direita">
+      @for (item of externaDireita; track item.titulo) {
+        <div class="hub__card hub__card--secundario">{{ item.titulo }}</div>
+      }
+    </div>
+  </div>
+</section>

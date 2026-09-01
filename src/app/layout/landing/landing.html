@@ -8,14 +8,14 @@
     </div>
 
     <div class="hero__nav-center">
-      <span>
+      <a href="#funcionalidades">
         Funcionalidades
         <svg class="hero__nav-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="m6 9 6 6 6-6"/>
         </svg>
-      </span>
-      <span>Segurança</span>
-      <span>Preços</span>
+      </a>
+      <a href="#seguranca">Segurança</a>
+      <a href="#precos">Preços</a>
     </div>
 
     <div class="hero__nav-actions">
@@ -42,8 +42,14 @@
   </div>
 </section>
 
+<app-tech-marquee />
+
 <app-mission />
 
-<app-how-it-works />
+<app-feature-hub id="seguranca" />
 
-<app-pricing />
+<app-how-it-works id="funcionalidades" />
+
+<app-pricing id="precos" />
+
+<app-footer />

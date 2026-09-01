@@ -1,0 +1,26 @@
+<section class="marquee">
+  <p class="marquee__eyebrow">Construído com tecnologia real de produção</p>
+
+  <div class="marquee__track-wrapper">
+    <div class="marquee__track">
+      @for (item of stack; track item.slug) {
+        <span class="marquee__item">
+          <span class="marquee__icon-wrap">
+            <img [src]="iconeCinza(item.slug)" [alt]="item.nome" class="marquee__icon marquee__icon--base" />
+            <img [src]="iconeColorido(item.slug)" alt="" class="marquee__icon marquee__icon--cor" />
+          </span>
+          {{ item.nome }}
+        </span>
+      }
+      @for (item of stack; track item.slug) {
+        <span class="marquee__item" aria-hidden="true">
+          <span class="marquee__icon-wrap">
+            <img [src]="iconeCinza(item.slug)" alt="" class="marquee__icon marquee__icon--base" />
+            <img [src]="iconeColorido(item.slug)" alt="" class="marquee__icon marquee__icon--cor" />
+          </span>
+          {{ item.nome }}
+        </span>
+      }
+    </div>
+  </div>
+</section>
