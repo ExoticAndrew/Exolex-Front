@@ -155,6 +155,10 @@ form.sign-in-form {
     border-color: #9FCBF5;
   }
 
+  &:has(.input-field__olho) {
+    grid-template-columns: 15% 70% 15%;
+  }
+
   svg {
     width: 18px;
     height: 18px;
@@ -176,6 +180,28 @@ form.sign-in-form {
       color: rgba(255, 255, 255, 0.4);
       font-weight: 400;
     }
+  }
+}
+
+.input-field__olho {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+  }
+
+  &:hover {
+    color: #9FCBF5;
   }
 }
 

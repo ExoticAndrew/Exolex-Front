@@ -16,6 +16,9 @@ export class AuthPage {
   readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
+  readonly mostrarSenhaLogin = signal(false);
+  readonly mostrarSenhaCadastro = signal(false);
+
   readonly loginForm: FormGroup;
   readonly cadastroForm: FormGroup;
 
@@ -44,6 +47,14 @@ export class AuthPage {
   switchToSignIn(): void {
     this.errorMessage.set(null);
     this.isSignUp.set(false);
+  }
+
+  toggleSenhaLogin(): void {
+    this.mostrarSenhaLogin.set(!this.mostrarSenhaLogin());
+  }
+
+  toggleSenhaCadastro(): void {
+    this.mostrarSenhaCadastro.set(!this.mostrarSenhaCadastro());
   }
 
   onSubmitLogin(): void {
