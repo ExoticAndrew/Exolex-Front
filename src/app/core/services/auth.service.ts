@@ -11,10 +11,12 @@ export class AuthService {
   private readonly _id = signal<number | null>(null);
   private readonly _token = signal<string | null>(null);
   private readonly _nome = signal<string | null>(null);
+  private readonly _fotoUrl = signal<string | null>(null);
 
   readonly isAuthenticated = computed(() => this._token() !== null);
   readonly id = this._id.asReadonly();
   readonly nome = this._nome.asReadonly();
+  readonly fotoUrl = this._fotoUrl.asReadonly();
 
   constructor(private http: HttpClient) {}
 
@@ -30,10 +32,15 @@ export class AuthService {
     );
   }
 
+  atualizarFotoLocal(url: string): void {
+    this._fotoUrl.set(url);
+  }
+
   logout(): void {
     this._id.set(null);
     this._token.set(null);
     this._nome.set(null);
+    this._fotoUrl.set(null);
   }
 
   getToken(): string | null {
@@ -44,5 +51,6 @@ export class AuthService {
     this._id.set(response.id);
     this._token.set(response.token);
     this._nome.set(response.nome);
+    this._fotoUrl.set(response.fotoUrl);
   }
 }

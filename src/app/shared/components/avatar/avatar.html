@@ -1,0 +1,7 @@
+<div class="avatar" [class]="'avatar--' + tamanho">
+  @if (fotoUrl && !erroImagem()) {
+    <img [src]="fotoUrl" [alt]="nome" (error)="onErroImagem()" />
+  } @else {
+    <span [style.background]="cor()">{{ iniciais() }}</span>
+  }
+</div>

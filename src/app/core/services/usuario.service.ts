@@ -13,4 +13,10 @@ export class UsuarioService {
   listar(): Observable<UsuarioResponse[]> {
     return this.http.get<UsuarioResponse[]>(this.apiUrl);
   }
+
+  atualizarFoto(arquivo: File): Observable<{ fotoUrl: string }> {
+    const formData = new FormData();
+    formData.append('arquivo', arquivo);
+    return this.http.post<{ fotoUrl: string }>(`${this.apiUrl}/me/foto`, formData);
+  }
 }

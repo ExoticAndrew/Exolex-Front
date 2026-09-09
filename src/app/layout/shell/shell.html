@@ -39,9 +39,15 @@
   </aside>
 
   <div class="shell__main">
-    <header class="shell__header">
+        <header class="shell__header">
       <app-notificacao-sino />
-      <span class="shell__user">Olá, {{ authService.nome() }}</span>
+      <div class="shell__user">
+        <span class="shell__user-nome">Olá, {{ primeiroNome }}</span>
+        <button class="shell__avatar-btn" (click)="abrirSeletorFoto()" title="Trocar foto de perfil">
+          <app-avatar [nome]="authService.nome() ?? ''" [fotoUrl]="authService.fotoUrl()" tamanho="md" />
+        </button>
+        <input #inputFoto type="file" accept="image/png, image/jpeg, image/webp" hidden (change)="onFotoSelecionada($event)" />
+      </div>
     </header>
 
     <main class="shell__content">
