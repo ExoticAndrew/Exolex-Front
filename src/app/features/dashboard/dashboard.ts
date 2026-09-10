@@ -6,21 +6,26 @@ import { AuthService } from '../../core/services/auth.service';
 import { ProcessoService } from '../../core/services/processo.service';
 import { ClienteService } from '../../core/services/cliente.service';
 import { PrazoService } from '../../core/services/prazo.service';
+import { NotificacaoService } from '../../core/services/notificacao.service';
 import { PrazoProximo } from '../../core/models/prazo.model';
+import { ProcessoResponse } from '../../core/models/processo.model';
+import { Avatar } from '../../shared/components/avatar/avatar';
 
 type Urgencia = 'atrasado' | 'critico' | 'atencao' | 'tranquilo';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, Avatar],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
   readonly prazos = signal<PrazoProximo[]>([]);
+  readonly processosRecentes = signal<ProcessoResponse[]>([]);
   readonly totalProcessos = signal(0);
   readonly totalClientes = signal(0);
+  readonly notificacoesNaoLidas = signal(0);
   readonly loading = signal(true);
   readonly errorMessage = signal<string | null>(null);
 
@@ -43,7 +48,8 @@ export class Dashboard implements OnInit {
     protected authService: AuthService,
     private processoService: ProcessoService,
     private clienteService: ClienteService,
-    private prazoService: PrazoService
+    private prazoService: PrazoService,
+    private notificacaoService: NotificacaoService
   ) {}
 
   ngOnInit(): void {
@@ -58,13 +64,21 @@ export class Dashboard implements OnInit {
       },
     });
 
-    this.processoService.listar(0, 1).subscribe({
-      next: (page) => this.totalProcessos.set(page.totalElements),
+    this.processoService.listar(0, 4).subscribe({
+      next: (page) => {
+        this.processosRecentes.set(page.content);
+        this.totalProcessos.set(page.totalElements);
+      },
       error: () => {},
     });
 
     this.clienteService.listar(0, 1).subscribe({
       next: (page) => this.totalClientes.set(page.totalElements),
+      error: () => {},
+    });
+
+    this.notificacaoService.contarNaoLidas().subscribe({
+      next: (total) => this.notificacoesNaoLidas.set(total),
       error: () => {},
     });
   }
@@ -90,5 +104,10 @@ export class Dashboard implements OnInit {
     if (dias === 0) return 'Vence hoje';
     if (dias === 1) return 'Vence amanhã';
     return `Vence em ${dias} dias`;
+  }
+
+  responsavelDe(processo: ProcessoResponse): string {
+    const resp = processo.equipe.find((v) => v.papel === 'RESPONSAVEL');
+    return resp?.usuarioNome ?? '—';
   }
 }

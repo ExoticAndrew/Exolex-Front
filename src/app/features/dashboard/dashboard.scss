@@ -2,10 +2,10 @@
 
 .dash {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  max-width: 920px;
+  max-width: 1160px;
 
-  &__hero {
-    margin-bottom: 2rem;
+    &__hero {
+    margin-bottom: 1.75rem;
   }
 
   &__eyebrow {
@@ -31,6 +31,7 @@
     margin: 0;
   }
 
+
   &__alert {
     background: #fef2f2;
     border: 1px solid #fecaca;
@@ -40,57 +41,149 @@
     font-size: 14px;
     margin-bottom: 1.5rem;
   }
-  &__chips {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 1.75rem;
+
+  // ---- Resumo ----
+
+  &__resumo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
   }
 
-  &__chip {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    padding: 0.5rem 0.9rem;
-    border-radius: 999px;
-    font-size: 13px;
-  }
-
-  &__chip-numero {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  &__chip-label {
-    font-weight: 500;
-  }
-
-  &__chip--vencido {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  &__chip--urgente {
-    background: #fef3c7;
-    color: #d97706;
-  }
-
-  &__chip--em-dia {
-    background: #dcfce7;
-    color: #15803d;
-  }
-  &__prazos {
-    margin-bottom: 2.5rem;
-  }
-
-  &__prazos-header {
+  &__resumo-card {
     display: flex;
     align-items: center;
+    gap: 14px;
+    background: white;
+    border: 1px solid #e5e9f0;
+    border-radius: 14px;
+    padding: 1.1rem 1.25rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      border-color: #2E7BC9;
+      box-shadow: 0 4px 14px rgba(7, 38, 66, 0.06);
+    }
+  }
+
+  &__resumo-card--destaque {
+    border-color: rgba(46, 123, 201, 0.35);
+    background: #f7fafd;
+  }
+
+  &__resumo-icone {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #eaf2fb;
+    color: #2E7BC9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__resumo-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  &__resumo-numero {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #072642;
+    line-height: 1.1;
+  }
+
+  &__resumo-label {
+    font-size: 12px;
+    color: #6b7280;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // ---- Ações rápidas ----
+
+  &__acoes {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  &__acao-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    border: 1px solid #e5e9f0;
+    background: white;
+    color: #072642;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    &:hover {
+      border-color: #2E7BC9;
+      background: #f7fafd;
+    }
+  }
+
+  &__acao-btn--primaria {
+    background: #072642;
+    border-color: #072642;
+    color: white;
+
+    &:hover {
+      background: #0a3a63;
+      border-color: #0a3a63;
+    }
+  }
+
+  // ---- Layout de duas colunas ----
+
+  &__colunas {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  &__coluna-principal,
+  &__coluna-lateral {
+    min-width: 0;
+  }
+
+  // ---- Prazos ----
+
+  &__prazos-header,
+  &__processos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 10px;
     margin-bottom: 1rem;
 
     h2 {
-      font-size: 16px;
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 17px;
       font-weight: 600;
       color: #072642;
       margin: 0;
@@ -106,6 +199,46 @@
     border-radius: 999px;
   }
 
+  &__ver-todos {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #2E7BC9;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.1rem;
+  }
+
+  &__chip {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-size: 12px;
+  }
+
+  &__chip-numero {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  &__chip-label {
+    font-weight: 500;
+  }
+
+  &__chip--vencido { background: #fee2e2; color: #dc2626; }
+  &__chip--urgente { background: #fef3c7; color: #d97706; }
+  &__chip--em-dia { background: #dcfce7; color: #15803d; }
+
   &__loading {
     color: #6b7280;
     font-size: 14px;
@@ -120,7 +253,7 @@
 
     p {
       color: #6b7280;
-      font-size: 14px;
+      font-size: 13.5px;
       margin: 0;
     }
   }
@@ -136,15 +269,16 @@
     align-items: center;
     gap: 14px;
     background: white;
-    border-radius: 10px;
-    padding: 0.9rem 1.1rem;
+    border: 1px solid #e5e9f0;
+    border-radius: 12px;
+    padding: 0.85rem 1.05rem;
     text-decoration: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 14px rgba(7, 38, 66, 0.07);
+      border-color: #d6e3f5;
     }
   }
 
@@ -177,7 +311,7 @@
   }
 
   &__prazo-descricao {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 600;
     color: #1f2937;
     white-space: nowrap;
@@ -186,7 +320,7 @@
   }
 
   &__prazo-processo {
-    font-size: 12px;
+    font-size: 11.5px;
     color: #9ca3af;
   }
 
@@ -199,7 +333,7 @@
   }
 
   &__prazo-texto {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 600;
   }
 
@@ -217,48 +351,137 @@
   }
 
   &__prazo-data {
-    font-size: 11px;
+    font-size: 10.5px;
     color: #9ca3af;
   }
 
-  &__resumo {
-    display: flex;
-    gap: 1rem;
-  }
+  // ---- Processos recentes ----
 
-  &__resumo-item {
+  &__lista-processos {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
+  }
+
+  &__processo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     background: white;
     border: 1px solid #e5e9f0;
     border-radius: 12px;
-    padding: 1.1rem 1.4rem;
+    padding: 0.95rem 1.05rem;
     text-decoration: none;
-    min-width: 160px;
-    transition: border-color 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 
     &:hover {
-      border-color: #2E7BC9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(7, 38, 66, 0.07);
+      border-color: #d6e3f5;
     }
   }
 
-  &__resumo-numero {
-    font-family: 'Fraunces', Georgia, serif;
-    font-size: 26px;
+  &__processo-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__processo-numero {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #6b7280;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__processo-titulo {
+    font-size: 14px;
     font-weight: 600;
     color: #072642;
   }
 
-  &__resumo-label {
+  &__processo-cliente {
     font-size: 12px;
     color: #6b7280;
+  }
+
+  &__processo-rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  &__processo-avatares {
+    display: flex;
+    align-items: center;
+
+    app-avatar {
+      margin-left: -6px;
+      border: 2px solid white;
+      border-radius: 50%;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &__processo-mais {
+    margin-left: -6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #eaf2fb;
+    color: #2E7BC9;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  &__processo-resp {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+
+  &__badge--ativo { background: #dcfce7; color: #15803d; }
+  &__badge--arquivado { background: #fef3c7; color: #92400e; }
+  &__badge--encerrado { background: #f3f4f6; color: #6b7280; }
+}
+
+@media screen and (max-width: 900px) {
+  .dash {
+    &__colunas {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 @media screen and (max-width: 640px) {
   .dash {
     &__resumo {
+      grid-template-columns: 1fr;
+    }
+
+    &__acoes {
       flex-direction: column;
     }
 
@@ -268,6 +491,12 @@
 
     &__prazo-tempo {
       align-items: flex-start;
+    }
+
+    &__hero {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 1rem;
     }
   }
 }

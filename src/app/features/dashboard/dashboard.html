@@ -1,72 +1,157 @@
 ﻿<div class="dash">
-  <header class="dash__hero">
+   <header class="dash__hero">
     <p class="dash__eyebrow">Painel</p>
     <h1 class="dash__saudacao">Olá, {{ authService.nome() }}</h1>
-    <p class="dash__sub">Aqui está o que precisa da sua atenção agora.</p>
+    <p class="dash__sub">Confira o que está acontecendo no seu escritório.</p>
   </header>
-
   @if (errorMessage()) {
     <div class="dash__alert">{{ errorMessage() }}</div>
   }
 
-  @if (!loading() && prazos().length > 0) {
-    <div class="dash__chips">
-      <div class="dash__chip dash__chip--vencido">
-        <span class="dash__chip-numero">{{ prazosVencidos() }}</span>
-        <span class="dash__chip-label">Vencido{{ prazosVencidos() !== 1 ? 's' : '' }}</span>
+  <section class="dash__resumo">
+    <a routerLink="/app/processos" class="dash__resumo-card">
+      <div class="dash__resumo-icone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 2v6h6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
-      <div class="dash__chip dash__chip--urgente">
-        <span class="dash__chip-numero">{{ prazosUrgentes() }}</span>
-        <span class="dash__chip-label">Urgente{{ prazosUrgentes() !== 1 ? 's' : '' }}</span>
+      <div class="dash__resumo-texto">
+        <span class="dash__resumo-numero">{{ totalProcessos() }}</span>
+        <span class="dash__resumo-label">Processos ativos</span>
       </div>
-      <div class="dash__chip dash__chip--em-dia">
-        <span class="dash__chip-numero">{{ prazosEmDia() }}</span>
-        <span class="dash__chip-label">Em dia</span>
+    </a>
+
+    <a routerLink="/app/clientes" class="dash__resumo-card">
+      <div class="dash__resumo-icone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="dash__resumo-texto">
+        <span class="dash__resumo-numero">{{ totalClientes() }}</span>
+        <span class="dash__resumo-label">Clientes na carteira</span>
+      </div>
+    </a>
+
+    <div class="dash__resumo-card" [class.dash__resumo-card--destaque]="notificacoesNaoLidas() > 0">
+      <div class="dash__resumo-icone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="dash__resumo-texto">
+        <span class="dash__resumo-numero">{{ notificacoesNaoLidas() }}</span>
+        <span class="dash__resumo-label">Notificacoes nao lidas</span>
       </div>
     </div>
-  }
+  </section>
 
-  <section class="dash__prazos">
-    <div class="dash__prazos-header">
-      <h2>Prazos em foco</h2>
-      @if (prazos().length > 0) {
-        <span class="dash__prazos-count">{{ prazos().length }}</span>
-      }
-    </div>
+  <section class="dash__acoes">
+    <a routerLink="/app/processos" class="dash__acao-btn dash__acao-btn--primaria">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Novo processo
+    </a>
+    <a routerLink="/app/clientes" class="dash__acao-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12h14" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Novo cliente
+    </a>
+  </section>
 
-    @if (loading()) {
-      <p class="dash__loading">Carregando...</p>
-    } @else if (prazos().length === 0) {
-      <div class="dash__vazio">
-        <p>Nenhum prazo pendente nos seus processos. Tudo em dia.</p>
-      </div>
-    } @else {
-      <div class="dash__lista-prazos">
-        @for (prazo of prazos(); track prazo.id) {
-          <a [routerLink]="['/app/processos', prazo.processoId]" class="dash__prazo" [class.dash__prazo--atrasado]="urgencia(prazo.dataVencimento) === 'atrasado'" [class.dash__prazo--critico]="urgencia(prazo.dataVencimento) === 'critico'" [class.dash__prazo--atencao]="urgencia(prazo.dataVencimento) === 'atencao'" [class.dash__prazo--tranquilo]="urgencia(prazo.dataVencimento) === 'tranquilo'">
-            <div class="dash__prazo-marcador"></div>
-            <div class="dash__prazo-info">
-              <span class="dash__prazo-descricao">{{ prazo.descricao }}</span>
-              <span class="dash__prazo-processo">{{ prazo.processoNumero }}</span>
-            </div>
-            <div class="dash__prazo-tempo">
-              <span class="dash__prazo-texto">{{ textoPrazo(prazo.dataVencimento) }}</span>
-              <span class="dash__prazo-data">{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</span>
-            </div>
-          </a>
+  <div class="dash__colunas">
+    <section class="dash__coluna-principal">
+      <div class="dash__prazos-header">
+        <h2>Prazos em foco</h2>
+        @if (prazos().length > 0) {
+          <span class="dash__prazos-count">{{ prazos().length }}</span>
         }
       </div>
-    }
-  </section>
 
-  <section class="dash__resumo">
-    <a routerLink="/app/processos" class="dash__resumo-item">
-      <span class="dash__resumo-numero">{{ totalProcessos() }}</span>
-      <span class="dash__resumo-label">Processos ativos</span>
-    </a>
-    <a routerLink="/app/clientes" class="dash__resumo-item">
-      <span class="dash__resumo-numero">{{ totalClientes() }}</span>
-      <span class="dash__resumo-label">Clientes na carteira</span>
-    </a>
-  </section>
+      @if (!loading() && prazos().length > 0) {
+        <div class="dash__chips">
+          <div class="dash__chip dash__chip--vencido">
+            <span class="dash__chip-numero">{{ prazosVencidos() }}</span>
+            <span class="dash__chip-label">Vencido{{ prazosVencidos() !== 1 ? 's' : '' }}</span>
+          </div>
+          <div class="dash__chip dash__chip--urgente">
+            <span class="dash__chip-numero">{{ prazosUrgentes() }}</span>
+            <span class="dash__chip-label">Urgente{{ prazosUrgentes() !== 1 ? 's' : '' }}</span>
+          </div>
+          <div class="dash__chip dash__chip--em-dia">
+            <span class="dash__chip-numero">{{ prazosEmDia() }}</span>
+            <span class="dash__chip-label">Em dia</span>
+          </div>
+        </div>
+      }
+
+      @if (loading()) {
+        <p class="dash__loading">Carregando...</p>
+      } @else if (prazos().length === 0) {
+        <div class="dash__vazio">
+          <p>Nenhum prazo pendente nos seus processos. Tudo em dia.</p>
+        </div>
+      } @else {
+        <div class="dash__lista-prazos">
+          @for (prazo of prazos(); track prazo.id) {
+            <a [routerLink]="['/app/processos', prazo.processoId]" class="dash__prazo" [class.dash__prazo--atrasado]="urgencia(prazo.dataVencimento) === 'atrasado'" [class.dash__prazo--critico]="urgencia(prazo.dataVencimento) === 'critico'" [class.dash__prazo--atencao]="urgencia(prazo.dataVencimento) === 'atencao'" [class.dash__prazo--tranquilo]="urgencia(prazo.dataVencimento) === 'tranquilo'">
+              <div class="dash__prazo-marcador"></div>
+              <div class="dash__prazo-info">
+                <span class="dash__prazo-descricao">{{ prazo.descricao }}</span>
+                <span class="dash__prazo-processo">{{ prazo.processoNumero }}</span>
+              </div>
+              <div class="dash__prazo-tempo">
+                <span class="dash__prazo-texto">{{ textoPrazo(prazo.dataVencimento) }}</span>
+                <span class="dash__prazo-data">{{ prazo.dataVencimento | date: 'dd/MM/yyyy' }}</span>
+              </div>
+            </a>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="dash__coluna-lateral">
+      <div class="dash__processos-header">
+        <h2>Processos recentes</h2>
+        <a routerLink="/app/processos" class="dash__ver-todos">Ver todos</a>
+      </div>
+
+      @if (processosRecentes().length === 0) {
+        <div class="dash__vazio">
+          <p>Nenhum processo cadastrado ainda.</p>
+        </div>
+      } @else {
+        <div class="dash__lista-processos">
+          @for (processo of processosRecentes(); track processo.id) {
+            <a [routerLink]="['/app/processos', processo.id]" class="dash__processo-card">
+              <div class="dash__processo-topo">
+                <span class="dash__processo-numero">{{ processo.numero }}</span>
+                <span class="dash__badge" [class.dash__badge--ativo]="processo.status === 'ATIVO'" [class.dash__badge--arquivado]="processo.status === 'ARQUIVADO'" [class.dash__badge--encerrado]="processo.status === 'ENCERRADO'">
+                  {{ processo.status }}
+                </span>
+              </div>
+              <span class="dash__processo-titulo">{{ processo.titulo }}</span>
+              <span class="dash__processo-cliente">{{ processo.clienteNome }}</span>
+              <div class="dash__processo-rodape">
+                <div class="dash__processo-avatares">
+                  @for (vinculo of processo.equipe.slice(0, 3); track vinculo.usuarioId) {
+                    <app-avatar [nome]="vinculo.usuarioNome" tamanho="sm" />
+                  }
+                  @if (processo.equipe.length > 3) {
+                    <span class="dash__processo-mais">+{{ processo.equipe.length - 3 }}</span>
+                  }
+                </div>
+                <span class="dash__processo-resp">{{ responsavelDe(processo) }}</span>
+              </div>
+            </a>
+          }
+        </div>
+      }
+    </section>
+  </div>
 </div>
