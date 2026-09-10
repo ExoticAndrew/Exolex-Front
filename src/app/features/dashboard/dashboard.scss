@@ -40,7 +40,45 @@
     font-size: 14px;
     margin-bottom: 1.5rem;
   }
+  &__chips {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.75rem;
+  }
 
+  &__chip {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  &__chip-numero {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  &__chip-label {
+    font-weight: 500;
+  }
+
+  &__chip--vencido {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  &__chip--urgente {
+    background: #fef3c7;
+    color: #d97706;
+  }
+
+  &__chip--em-dia {
+    background: #dcfce7;
+    color: #15803d;
+  }
   &__prazos {
     margin-bottom: 2.5rem;
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -23,6 +23,21 @@ export class Dashboard implements OnInit {
   readonly totalClientes = signal(0);
   readonly loading = signal(true);
   readonly errorMessage = signal<string | null>(null);
+
+  readonly prazosVencidos = computed(() =>
+    this.prazos().filter((p) => this.urgencia(p.dataVencimento) === 'atrasado').length
+  );
+
+  readonly prazosUrgentes = computed(() =>
+    this.prazos().filter((p) => {
+      const u = this.urgencia(p.dataVencimento);
+      return u === 'critico' || u === 'atencao';
+    }).length
+  );
+
+  readonly prazosEmDia = computed(() =>
+    this.prazos().filter((p) => this.urgencia(p.dataVencimento) === 'tranquilo').length
+  );
 
   constructor(
     protected authService: AuthService,

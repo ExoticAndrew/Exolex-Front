@@ -21,7 +21,7 @@ export class Mission implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.words = this.texto.split(' ');
-    this.onScroll();
+    setTimeout(() => this.onScroll());
   }
 
   @HostListener('window:scroll')

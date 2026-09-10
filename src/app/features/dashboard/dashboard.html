@@ -9,6 +9,23 @@
     <div class="dash__alert">{{ errorMessage() }}</div>
   }
 
+  @if (!loading() && prazos().length > 0) {
+    <div class="dash__chips">
+      <div class="dash__chip dash__chip--vencido">
+        <span class="dash__chip-numero">{{ prazosVencidos() }}</span>
+        <span class="dash__chip-label">Vencido{{ prazosVencidos() !== 1 ? 's' : '' }}</span>
+      </div>
+      <div class="dash__chip dash__chip--urgente">
+        <span class="dash__chip-numero">{{ prazosUrgentes() }}</span>
+        <span class="dash__chip-label">Urgente{{ prazosUrgentes() !== 1 ? 's' : '' }}</span>
+      </div>
+      <div class="dash__chip dash__chip--em-dia">
+        <span class="dash__chip-numero">{{ prazosEmDia() }}</span>
+        <span class="dash__chip-label">Em dia</span>
+      </div>
+    </div>
+  }
+
   <section class="dash__prazos">
     <div class="dash__prazos-header">
       <h2>Prazos em foco</h2>
